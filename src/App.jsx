@@ -1,23 +1,31 @@
 import Converter from "./components/Converter.jsx";
 import {useEffect, useState} from "react";
 import currencies from "./utils/APICalls.js";
+import PreLoader from "./components/PreLoader.jsx";
 
 function App() {
-    const [currency,setCurrency] = useState([]);
-    const [currencyCode,setCurrencyCode] = useState([]);
+    const [loader, setLoader] = useState(false);
+    const [currency, setCurrency] = useState([]);
+    const [currencyCode, setCurrencyCode] = useState([]);
 
-    useEffect(()=>{
-        (async ()=>{
+    useEffect(() => {
+        setLoader(true);
+        (async () => {
             const data = await currencies();
             setCurrency(Object.values(data));
             setCurrencyCode(Object.keys(data));
         })()
-    },[])
-  return (
-    <>
-      <Converter currency={currency} currencyCode={currencyCode}/>
-    </>
-  )
+        setLoader(false);
+    }, [currency])
+    return (
+        <>
+            {
+                loader === true ?
+                    <PreLoader/> : ""
+            }
+            <Converter currency={currency} currencyCode={currencyCode}/>
+        </>
+    )
 }
 
 export default App
