@@ -31,7 +31,11 @@ const Converter = (props) => {
                                     onChange={(e) => setFromCurrency(e.target.value)}>
                                 {
                                     props.currencyCode.map((item, index) => {
-                                            return (<option key={index} value={item}>{props.currency[index]}</option>);
+                                            return (
+                                                item !== toCurrency?
+                                                <option key={index} value={item}>{props.currency[index]}</option>:
+                                                <option disabled key={index} value={item}>{props.currency[index]}</option>
+                                            );
                                         }
                                     )
                                 }
@@ -58,7 +62,11 @@ const Converter = (props) => {
                                     onChange={(e) => setToCurrency(e.target.value)}>
                                 {
                                     props.currencyCode.map((item, index) => {
-                                            return (<option key={index} value={item}>{props.currency[index]}</option>);
+                                            return (
+                                                item !== fromCurrency?
+                                                    <option key={index} value={item}>{props.currency[index]}</option>:
+                                                    <option disabled key={index} value={item}>{props.currency[index]}</option>
+                                            );
                                         }
                                     )
                                 }
