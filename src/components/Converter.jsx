@@ -1,16 +1,25 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import conversion from "../utils/APIConversion.js";
+
 
 const Converter = (props) => {
-    const [fromCurrency, setFromCurrency] = useState("");
-    const [toCurrency, setToCurrency] = useState("");
-    const [amount, setAmount] = useState("");
+    const [fromCurrency, setFromCurrency] = useState("USD");
+    const [toCurrency, setToCurrency] = useState("EUR");
+    const [amount, setAmount] = useState(1);
     const [convertedAmount, setConvertedAmount] = useState("");
+    useEffect(()=>{
+        (async ()=>{
+            const res = await conversion(amount,fromCurrency,toCurrency);
+            const data = await res.data;
+            setConvertedAmount(data.rates[toCurrency]);
+        })()
+    },[fromCurrency,toCurrency,amount])
     return (
         <div>
             <div className="md:container md:mx-auto md:py-28 py-10">
                 <div className="grid grid-cols-1 pb-4 mb-5">
                     <p className="text-center font-mono text-2xl font-extrabold uppercase mb-8">Currency Converter</p>
-                    <p className="text-center font-serif text-xl font-bold">1 USD = 111.00 BDT</p>
+                    <p className="text-center font-serif text-xl font-bold">{amount} {fromCurrency} = {convertedAmount} {toCurrency}</p>
                 </div>
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-y-4">
                     <div className="flex md:justify-end justify-center">
@@ -20,7 +29,6 @@ const Converter = (props) => {
                             </label>
                             <select className="select select-bordered" value={fromCurrency}
                                     onChange={(e) => setFromCurrency(e.target.value)}>
-                                <option disabled selected>Select one</option>
                                 {
                                     props.currencyCode.map((item, index) => {
                                             return (<option key={index} value={item}>{props.currency[index]}</option>);
@@ -48,7 +56,6 @@ const Converter = (props) => {
                             </label>
                             <select className="select select-bordered" value={toCurrency}
                                     onChange={(e) => setToCurrency(e.target.value)}>
-                                <option disabled selected>Select one</option>
                                 {
                                     props.currencyCode.map((item, index) => {
                                             return (<option key={index} value={item}>{props.currency[index]}</option>);

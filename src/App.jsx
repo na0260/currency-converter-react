@@ -1,6 +1,6 @@
 import Converter from "./components/Converter.jsx";
 import {useEffect, useState} from "react";
-import currencies from "./utils/APICalls.js";
+import currencies from "./utils/APICurrency.js";
 import PreLoader from "./components/PreLoader.jsx";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
             setCurrencyCode(Object.keys(data));
         })()
         setLoader(false);
-    }, [currency])
+    }, [currency,currencyCode])
     return (
         <>
             {
